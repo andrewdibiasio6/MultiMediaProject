@@ -1,2 +1,0 @@
-# MultiMediaProject
-MultiMediaProject for pi
