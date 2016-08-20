@@ -18,7 +18,7 @@ var mediaCenterApp = angular.module('mediaCenterApp', ['ngRoute'])
     			.when('/view1',
     			{
     				controller: 'mainCtrl',
-    				templateUrl: 'app/partials/view1.jsp'
+    				templateUrl: 'app/partials/view1.html'
     			})
     			.when('/view2',
     			{
