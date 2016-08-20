@@ -1,0 +1,12 @@
+<!-- rssFeed.html contains html that will display rss feed data -->
+
+<div class="row-fluid">
+            <ul class="unstyled">
+                <span class="badge badge-warning" ng-show="feeds.length > 0">{{(feeds | filter:filterText).length}} Items</span>
+                <li ng-repeat="feed in feeds | filter:filterText">                    
+                    <h5><a href="{{feed.link}}">{{feed.title}}</a></h5>                                        
+                    <p class="text-left">{{feed.contentSnippet}}</p>                    
+                    <span class="small">{{feed.publishedDate}}</span>
+                </li>                
+            </ul>            
+        </div>
