@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+
+#fiveDayForecast{
+	float:left;
+	padding: 5px;
+}
+
+#firstDayForecast{
+	float:left;
+	padding: 5px;
+}

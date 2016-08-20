@@ -1,0 +1,17 @@
+<!-- weatherDetailsView.html contains the partial html 
+     for display of five day's basic forecasts. 
+ -->
+
+<!-- repeat through fiveDayForecast and display all data -->
+<div id="fiveDayForecast" ng-repeat="forecast in fiveDayForecast track by $index">
+	<!--custom directive that returns template html -->
+    <weather-icon condition="{{ forecast.weatherIcon }}"></weather-icon>
+	<div>
+		<h3>{{(forecast.date * 1000)| date:'EEE d'}}</h3> 
+			<h4>{{forecast.weatherDescription}}</h4> 
+				<h5>
+					Current: {{forecast.temp.average | temp }}<br/>
+					min: {{forecast.temp.min | temp }}, max: {{forecast.temp.max | temp }}
+				</h5>
+	</div>
+</div>
