@@ -9,11 +9,11 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 			 
 			 var getAuthorizationPromise = $q.defer();
 
-			 // Your Client ID can be retrieved from your project in the Google
+			  // Your Client ID can be retrieved from your project in the Google
 		      // Developer Console, https://console.developers.google.com
 		      var CLIENT_ID = '781793325393-sv51mecb15he072hpkantrph67e9tuhi.apps.googleusercontent.com';
 	
-		      var SCOPES = ['https://mail.google.com/mail/feed/atom', 'https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/drive.metadata.readonly'];
+		      var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/drive.metadata.readonly'];
 
 		      /**
 		       * Initiate auth flow in response to user clicking authorize button.
@@ -52,51 +52,14 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		        }
 		      }
 	
-		          /**
-			       * Load Gmail API client library. List labels once client library
-			       * is loaded.
-			       */
-			      function loadGmailApi() {
-			        return gapi.client.load('gmail', 'v1'); //, listLabels
-			      }
-	
-//		      /**
-//		       * Print all Labels in the authorized user's inbox. If no labels
-//		       * are found an appropriate message is printed.
-//		       */
-//		      function listLabels() {
-//		        var request = gapi.client.gmail.users.labels.list({
-//		          'userId': 'me'
-//		        });
-//	
-//		        request.execute(function(resp) {
-//		        	
-////		        	$rootScope.$apply(function () {
-////                        success = resp;
-////                    });
-//					 var labels = resp.labels;
-//					 appendPre('Labels:');
-//						
-//					 if (labels && labels.length > 0)
-//					 {
-//					 for (i = 0; i < labels.length;
-//					 i++) {
-//					 var label = labels[i];
-//					 appendPre(label.name)
-//					 }
-//							          } else {
-//							            appendPre('No Labels found.');
-//							          }
-//		        });
-//		        
-////		        $scope.loadButonText="Load";
-////		        $scope.loadFeed=function(e){        
-////		            Feed.parseFeed('https://mail.google.com/mail/feed/atom/INBOX').then(function(res){
-////		                $scope.loadButonText=angular.element(e.target).text();
-////		                $scope.feeds=res.data.responseData.feed.entries;
-////		            });
-////		        }
-//		      }
+	          /**
+		       * Load Gmail API client library. List labels once client library
+		       * is loaded.
+		       */
+		      function loadGmailApi() {
+		        return gapi.client.load('gmail', 'v1'); //, listLabels
+		      }
+
 		      
 		      /**
 		       * Check if current user has authorized this application.
@@ -143,7 +106,7 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		        });
 		      }
 
-		      //listLabels();
+		      listLabels();
 		      return;
 		},
 		
