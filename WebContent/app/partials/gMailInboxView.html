@@ -3,7 +3,7 @@
  -->
 
 <!-- repeat through all messages in messages array-->
-<div id="gMailInbox" ng-repeat="message in messages | filter:filterText">                 
+<div id="gMailInbox" ng-repeat="message in messages track by $index" | orderBy:'-date' | filter:filterText">                 
 	<h5>DATE: {{message.date | date:'medium'}} FROM:{{message.from}} SUBJECT:{{message.subject}}</h5><br>
     <p>SNIPPET:{{message.snippet}}</p><br>                   
 </div>

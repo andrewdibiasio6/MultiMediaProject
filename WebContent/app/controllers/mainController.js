@@ -16,21 +16,13 @@ mediaCenterApp.controller('mainCtrl',[
     	
     	$scope.authInit = function(event){
 
-    		console.log("TEST !");
-
     		gmailService.getAuthorization(event).then(function(success){
     			console.log("success");
-    			gmailService.getLabels();
+    			//gmailService.getLabels();
     			
     			gmailService.getEmails();
-    			//.then(function(success){
-//    				$scope.messages = success;
-//    			}, function(failure){
-//        			console.log("gmail messages failure");
-//        		});
-
     		}, function(failure){
-    			console.log("gmail labels failure");
+    			errorPrepend("gmail Auth failure");
     		});
     	}
 
@@ -41,7 +33,7 @@ mediaCenterApp.controller('mainCtrl',[
                 //$scope.loadButonText=angular.element(e.target).text();
                 $scope.feeds=res.data.responseData.feed.entries;
             },function(failure){
-    			alert("Feed load failure");
+            	errorPrepend("Feed load failure");
             });
         }
         
@@ -59,46 +51,21 @@ mediaCenterApp.controller('mainCtrl',[
 
         //initializes page
     	angular.element(document).ready(function () {
-//            $scope.loadFeed();
-//            $scope.authClick();
     		$scope.initEntirePage();
         });
 
+    	//Listener for newMessageObj broadcast from gmailService
     	$scope.$on("newMessageObj", function (event, args){
-    		//console.log(args.obj.payload.headers);
-    		//args.obj.payload.headers[13].value;
-    		var message = {
-    						snippet: "" + args.obj.snippet.replace("&#39;", "'") + "...",
-    						date:undefined,
-    						from: undefined,
-    						subject: undefined
-    		};
-
-    		//Construct Message Obj
-    		for(var i = 0; i< args.obj.payload.headers.length; i++){
-    			switch(args.obj.payload.headers[i].name){
-	    			case "Date":
-	    				message.date = new Date(args.obj.payload.headers[i].value);
-	    				break;
-	    			case "From":
-	    				var temp = args.obj.payload.headers[i].value;
-	    				temp = temp.replace(">", "");
-	    				temp = temp.replace("<", "");
-	    				message.from = temp;
-	    				break;
-	    			case "Subject":
-	    				message.subject = args.obj.payload.headers[i].value;
-	    				break;
-	    			default:
-	    	        	//do nothing
-	    				break;
-    			}
-    		}
-
     		//Waits for all angular models to be loaded and current digest cycle to complete
     		$timeout(function(){
     			//code
-    			$scope.messages.push(message);
+    			$scope.messages.push(args.obj);
     		})
     	});
+    	
+        function errorPrepend(message) {
+            var pre = document.getElementById('errorOutput');
+            var textContent = document.createTextNode(message + '\n');
+            pre.appendChild(textContent);
+          }
 }]);
