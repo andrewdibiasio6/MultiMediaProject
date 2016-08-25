@@ -20,7 +20,8 @@ mediaCenterApp.controller('mainCtrl',[
     			console.log("success");
     			//gmailService.getLabels();
     			
-    			gmailService.getEmails();
+    			//gmailService.getEmails();
+    			gmailService.getPictures();
     		}, function(failure){
     			errorPrepend("gmail Auth failure");
     		});
