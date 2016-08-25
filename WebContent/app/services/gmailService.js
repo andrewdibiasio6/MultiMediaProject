@@ -13,8 +13,7 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		      // Developer Console, https://console.developers.google.com
 		      var CLIENT_ID = '781793325393-sv51mecb15he072hpkantrph67e9tuhi.apps.googleusercontent.com';
 	
-		      var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
-		      //'https://www.googleapis.com/auth/gmail.readonly', 
+		      var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/drive.metadata.readonly'];
 
 		      /**
 		       * Initiate auth flow in response to user clicking authorize button.
@@ -24,7 +23,8 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		      function handleAuthClick(event) {
 		        gapi.auth.authorize(
 		          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
-		          handleAuthResult);    
+		          handleAuthResult);
+		       
 		        return false;
 		      }
 		      
@@ -57,10 +57,10 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		       * is loaded.
 		       */
 		      function loadGmailApi() {
-		        //return gapi.client.load('gmail', 'v1'); //, listLabels
-		    	  return gapi.client.load('drive', 'v2'); // gDrive
+		        return gapi.client.load('gmail', 'v1'); //, listLabels
 		      }
 
+		      
 		      /**
 		       * Check if current user has authorized this application.
 		       */
@@ -195,28 +195,6 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 			}
 			//Kick off email gathering.
 			return listMessages();
-		},
-		getPictures: function(){
-			/**
-		       * Print files.
-		       */{
-		        var request = gapi.client.drive.files.list({
-		            'maxResults': 10
-		          });
-
-		          return request.execute(function(resp) {
-		        	console.log('Files:');
-		            var files = resp.items;
-		            if (files && files.length > 0) {
-		              for (var i = 0; i < files.length; i++) {
-		                var file = files[i];
-		                console.log(file.title + ' (' + file.id + ')');
-		              }
-		            } else {
-		            	console.log('No files found.');
-		            }
-		          });
-		      }
 		}
 	}
 }]);
