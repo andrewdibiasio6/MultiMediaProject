@@ -93,16 +93,14 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 					 var labels = resp.labels;
 					 appendPre('Labels:');
 						
-					 if (labels && labels.length > 0)
-					 {
-					 for (i = 0; i < labels.length;
-					 i++) {
-					 var label = labels[i];
-					 appendPre(label.name)
-					 }
-				          } else {
-				            appendPre('No Labels found.');
-				          }
+					 if (labels && labels.length > 0){
+						 for (i = 0; i < labels.length;i++) {
+							 var label = labels[i];
+							 appendPre(label.name)
+						 }
+			          } else {
+			            appendPre('No Labels found.');
+			          }
 		        });
 		      }
 
@@ -120,7 +118,6 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 		       * are found an appropriate message is printed.
 		       */
 		      function listMessages() {
-		    	  var messages = [];
 
 		        var request = gapi.client.gmail.users.messages.list({
 		          'userId': 'me'
@@ -131,10 +128,7 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 
 					 if (messageIDS && messageIDS.length >= 20)
 					 {
-						 for (i = 0; i <= 20; i++) {
-							 var id = messageIDS[i].id;
-							 var tempMessage = getMessage('me', id);
-						 }
+						 getMessage('me', messageIDS);
 			          } else {
 			        	  errorPrepend('No Messages found.');
 			          }
@@ -149,52 +143,64 @@ mediaCenterApp.service('gmailService', ['$http', '$q', '$rootScope', function($h
 			 * @param  {String} messageId ID of Message to get.
 			 * @param  {Function} callback Function to call when the request is complete.
 			 */
-			function getMessage(userId, messageId, callback){
+			function getMessage(userId, messageIds, callback){
 
-			  var request = gapi.client.gmail.users.messages.get({
-			    'userId': userId,
-			    'id': messageId,
-			    'format': 'full'
-			  });
-			//populate then broadcast message obj to controller.
-			return request.execute(function(resp) {
-				  
-				//New message obj
-				  var message = {
-  						snippet: "" + resp.snippet.replace("&#39;", "'") + "...",
-  						date:undefined,
-  						from: undefined,
-  						subject: undefined
-			  		};
+				 var messageList = [];
 			
-			  		//Populate Message Obj
-		    		for(var i = 0; i< resp.payload.headers.length; i++){
-			  			switch(resp.payload.headers[i].name){
-				    			case "Date":
-				    				message.date = new Date(resp.payload.headers[i].value);
-				    				break;
-				    			case "From":
-				    				var temp = resp.payload.headers[i].value;
-				    				temp = temp.replace(">", "");
-				    				temp = temp.replace("<", "");
-				    				message.from = temp;
-				    				break;
-				    			case "Subject":
-				    				message.subject = resp.payload.headers[i].value;
-				    				break;
-				    			default:
-				    	        	//do nothing
-				    				break;
-			  			}
-		    		}
-		    		//Broadcast newly created message obj to listener in mainController.
-		    		$rootScope.$broadcast("newMessageObj", {
-						  obj: message
+				 for (i = 0; i <= 20; i++) {
+	
+					 var id = messageIds[i].id;
+					 
+					 var request = gapi.client.gmail.users.messages.get({
+						    'userId': userId,
+						    'id': id,
+						    'format': 'full'
+						  });
+						  
+					  request.then(function(resp) {
+						 var resultObj = resp.result;
+						//New message obj
+						  var message = {
+		  						snippet: "" + resultObj.snippet.replace("&#39;", "'") + "...",
+		  						date:undefined,
+		  						from: undefined,
+		  						subject: undefined
+					  		};
+					
+					  		//Populate Message Obj
+				    		for(var i = 0; i< resultObj.payload.headers.length; i++){
+					  			switch(resultObj.payload.headers[i].name){
+						    			case "Date":
+						    				message.date = new Date(resultObj.payload.headers[i].value);
+						    				break;
+						    			case "From":
+						    				var temp = resultObj.payload.headers[i].value;
+						    				temp = temp.replace(">", "");
+						    				temp = temp.replace("<", "");
+						    				message.from = temp;
+						    				break;
+						    			case "Subject":
+						    				message.subject = resultObj.payload.headers[i].value;
+						    				break;
+						    			default:
+						    	        	//do nothing
+						    				break;
+					  			}
+				    		}
+				    		broadCast(message);
+					  }, function(reason) {
+					    // Handle error
 					  });
-			  })
+				}
 			}
 			//Kick off email gathering.
 			return listMessages();
 		}
+	}
+	
+	function broadCast(obj){
+		$rootScope.$broadcast("newMessageObj", {
+			  obj: obj
+		  });
 	}
 }]);
