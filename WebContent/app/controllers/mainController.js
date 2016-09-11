@@ -58,7 +58,6 @@ mediaCenterApp.controller('mainCtrl',[
     	$scope.$on("newMessageObj", function (event, args){
     		//Waits for all angular models to be loaded and current digest cycle to complete
     		$timeout(function(){
-    			//code
     			$scope.messages.push(args.obj);
     		})
     	});
